@@ -149,7 +149,7 @@ void    dispatch(char *str, char **env)
         ft_pwd(str);
     else if (search_word(str, "echo") == 1)
         ft_echo(str);
-    else if (search_word(str, "./") == 1)
+    else if (ft_split(str, "\t\n\r\v\f ")[0][0] == '.' && ft_split(str, "\t\n\r\v\f ")[0][1] == '/')
         find_exe(0, str);
     else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "export") == 0)
         set_env(env, ft_split(str, "\t\n\r\v\f "));
@@ -172,7 +172,7 @@ int main(int ac, char **av, char **env)
 
     end = 0;
     line = NULL;
-    while (end == 0)
+    while (res && end == 0)
     {
         write(1, "***minishell*** > ", 18);
         res = get_next_line(0, &line);
@@ -184,4 +184,5 @@ int main(int ac, char **av, char **env)
 //        end = 1;
     }
     free(line);
+    return (0);
 }

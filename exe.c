@@ -265,33 +265,31 @@ int launch_exe(char *exe, char *path)
 {
     pid_t pid;
     int ret;
-    int *pid_ret;
+    int status;
 
     pid = 0;
     ret = 0;
     errno = 0;
-    pid_ret = 0;
+    status = 0;
     char* argv[] = { ft_strjoin(path, exe), "/bin/sh", "-c", NULL };
     char* envp[] = { ft_strjoin("HOME=", "."), ft_strjoin("PATH=", path), NULL };
     if ((pid = fork()) == 0)
     {
         if ((ret = execve(argv[0], argv, envp)) == -1)
-        {
-            printf("%s\n", strerror(errno));
-            return (0);
-        }
-        return (0);
+		{
+		    printf("%s\n", strerror(errno));
+			exit(0);
+		}
     }
-    else if (pid == -1)
-    {
-        printf("%s\n", strerror(errno));
+    waitpid(ret, &status, 0);
+	if (WIFEXITED(status))
         return (0);
-    }
     else
 	{
-		//waitpid
-        return (0);
+        printf("%s\n", strerror(errno));
+		exit(0);
 	}
+    return (0);
 // waitpid attd que le programme se termine 
 }
 
@@ -309,7 +307,10 @@ int find_exe(int index, char *path)
     path_mod = NULL;
     errno = 0;
     if (!(dir = opendir(get_path(path, '/'))))
-        printf("%s\n", strerror(errno));
+	{
+	    printf("%s\n", strerror(errno));
+		return (0);
+	}
     while ((s_dir = readdir(dir)))
     {
         if (ft_strcmp(s_dir->d_name, str) == 0)
@@ -322,10 +323,8 @@ int find_exe(int index, char *path)
     if (errno)
         printf("%s\n", strerror(errno));
     else
-    {
         launch_exe(str, path);
-        return (0);
-    }
+	return (0);
 }
 
 char *ft_get_name(char *str)
