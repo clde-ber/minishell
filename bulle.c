@@ -152,12 +152,11 @@ void    dispatch(char *str, char **env)
     else if (search_word(str, "./") == 1)
         find_exe(0, str);
     else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "export") == 0)
-        var_env = set_env(0, ft_split(str, "\t\n\r\v\f "));
-//        printf("hey%s\n", var_env->name);
+        set_env(env, ft_split(str, "\t\n\r\v\f "));
     else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "env") == 0)
         print_env(env, var_env);
-    else if (search_word(str, "unset") == 1)
-        ft_lstdelone(var_env);
+    else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "unset") == 0)
+        unset(var_env, ft_split(str, "\t\n\r\v\f "));
     else
         printf("nope");
 }

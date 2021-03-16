@@ -426,36 +426,42 @@ void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *), char *str)
 	if (!lst || !f)
 		return ;
 	f(lst, str);
-	printf("lst->name %s\n", lst->name);
-	printf("lst->next %s\n", lst->next);
 	lst = lst->next;
 }
 
-t_list *set_env(int argc, char **tab)
+t_list *set_env(char **env, char **tab)
 {
     int i;
 	int j;
+	int k;
     t_list *lst;
     t_list *first;
 
 	j = 0;
 	while (tab[j])
-	{
-		printf("tab[j] %s\n", tab[j]);
 		j++;
-	}
     i = j - 1;
-	lst = ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1);
+	k = 0;
+	while (env[k])
+		k++;
+	k--;
+	var_env = ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1);
 	while (i >= 1)
     {
-		ft_lstadd_front(&lst, ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1));
-		ft_lstiter(lst, &ft_record, tab[i]);
+		ft_lstadd_front(&var_env, ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1));
+		ft_lstiter(var_env, &ft_record, tab[i]);
 		i--;
 	}
-    return (lst);
+	while (k >= 1)
+	{
+		ft_lstadd_front(&var_env, ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1));
+		ft_lstiter(var_env, &ft_record, env[k]);
+		k--;
+	}
+    return (var_env);
 }
 
-t_list	*unset(t_list *env, char **tab, int argc)
+t_list	*unset(t_list *env, char **tab)
 {
 	int i;
 	int j = 0;
@@ -463,26 +469,39 @@ t_list	*unset(t_list *env, char **tab, int argc)
 	while (tab[j])
 		j++;
 	i = 1;
-	while (i < j - 1)
+	while (env->next)
 	{
-		if (strcmp(tab[i], env->name) == 0)
-			ft_lstdelone(env);
-		i++;
+		while (i < j)
+		{
+			if (strcmp(tab[i], env->name) == 0)
+			{
+				env->name = "";
+				env->value = "";
+			}
+			i++;
+		}
+		env = env->next;
+		i = 1;
 	}
 	return (env);
 }
 
 void print_env(char **tab, t_list *env)
 {
-	int i = -1;
-	while (tab[++i])
-		printf("%s\n", tab[i]);
+//	int i = -1;
 //	printf("%d\n", var_env);
-	while (env && env->next)
+	char *str = NULL;
+	char *str2 = NULL;
+	while (env->next)
 	{
-		if (env->name)
-    		printf(ft_strjoin(ft_strjoin(env->name, "="), env->value));
-		printf("\n");
+		if (ft_strlen(env->name))
+    	{
+			str2 = ft_strjoin(env->name, "=");
+			str = ft_strjoin(str2, env->value);
+			printf("%s\n", str);
+			free(str);
+			free(str2);
+		}
 		env = env->next;
 	}
 }
