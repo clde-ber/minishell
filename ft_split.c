@@ -69,12 +69,30 @@ int ft_ischarset(char *str, char c)
 size_t	len_wd(char const *str, char *charset)
 {
 	size_t i;
+    int boolean;
 
 	i = 0;
-	while (str[i])
+    boolean = 0;
+	while (str[i] && boolean == 0)
 	{
-		if (ft_ischarset(charset, str[i]))
-			break ;
+        if (((i && str[i - 1] != '\\') || !i) && str[i] == '\'')
+        {
+            i++;
+            while (!(str[i - 1] != '\\' && str[i] == '\''))
+				i++;
+			boolean = 1;
+        }
+        if (((i && str[i - 1] != '\\') || !i) && str[i] == '\"')
+        {
+            i++;
+            while (!(str[i - 1] != '\\' && str[i] == '\"'))
+                i++;
+			boolean = 1;
+        }
+		if (((i && str[i - 1] != '\\') || !i) && ft_ischarset(charset, str[i]))
+		{
+			boolean = 1;
+		}
 		i++;
 	}
 	return (i);
@@ -89,13 +107,10 @@ size_t	count_malloc(char const *s, char *str)
 	count = 0;
 	if (s[i] == '\0')
 		return (1);
-	while (s[i])
+    while (i < ft_strlen((char *)s))
 	{
-//		printf("count %d\n", count);
-//		printf("i %d\n", i);
-		if (ft_ischarset(str, s[i]) == 0 && (ft_ischarset(str, s[i + 1]) || s[i + 1] == '\0'))
-			count++;
-		i++;
+		i += len_wd(&s[i], str);
+		count++;
 	}
 	return (count);
 }
@@ -128,7 +143,7 @@ char			**ft_split(char const *s, char *str)
 		return (0);
 	while (i < ft_strlen((char *)s))
 	{
-		while (j < count_malloc(s, str) && s[i] && ft_ischarset(str, s[i]) == 0)
+		while (s[i] && j < count_malloc(s, str) && s[i] && ft_ischarset(str, s[i]) == 0)
 		{
 			if (!(res[j] = malloc(sizeof(char) * (len_wd(&s[i], str) + 1))))
 				return (ft_free(res, j));
