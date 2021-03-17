@@ -2,103 +2,6 @@
 
 t_list *var_env = NULL;
 
-void    redir_file(char *str, char *output)
-{
-
-}
-
-void    check_redir(char *command, char *output)
-{
-    char *ret;
-
-    //if ((ret = strchr(command, '<')) != NULL)
-    //    redir_ext(command, output);
-    /*else*/ if ((ret = strchr(command, '>')) != NULL)
-    {
-    //    if (ret++ == '>')
-    //        redir_EOF(command, output);
-        redir_file(command, output);
-    }
-}
-
-int check_word(char *str, char *to_find, int i)
-{
-    int j;
-
-    j = 0;
-    while (to_find[j])
-    {
-        if (str[i + j] == to_find[j])
-            j++;
-        else
-            return (0);
-    }
-    return (1);
-}
-
-int search_word(char *str, char *to_find)
-{
-    int i;
-
-    i = 0;
-    while(str[i])
-    {
-        if (str[i] == to_find[0])
-        {
-            if (check_word(str, to_find, i) == 1)
-                return (1);
-        }
-        i++;
-    }
-    return (0);
-}
-
-void    ft_echo_stdin(char *str, int option, int i)
-{
-    // add difference single double quote
-    i++;
-    while (str[i] != '\'' && str[i] != '\"')
-    {
-        write(1, &str[i], 1);
-        i++;
-    }
-    if (option == 0)
-        write(1, "\n", 1);
-    // check if EOF print
-    write(1, "\0", 1);
-}
-
-void    ft_echo_doc(char *str, int option, int i)
-{
-    write(1, "here", 4);
-    return;
-}
-
-
-void    ft_echo(char *str)
-{
-    // tester linux echo sans guillements
-    int option;
-    int i;
-
-    i = 0;
-    option = search_word(str, "-n");
-    while (str[i])
-    {
-        if (str[i] == '<' || str[i] == '>')
-        {
-            ft_echo_doc(str, option, i);
-            return ;
-        }
-        else if (str[i] == '\"' || str[i] == '\'')
-        {
-            ft_echo_stdin(str, option, i);
-            return ;
-        }
-        i++;
-    }
-}
-
 char *getcommand(char *str)
 {
     int i;
@@ -176,7 +79,7 @@ int main(int ac, char **av, char **env)
     {
         write(1, "***minishell*** > ", 18);
         res = get_next_line(0, &line);
-        if (ft_strcmp(line, "exit") == 0)
+        if (ft_strcmp(line, "exit") == 0) //builtin à coder
             end = 1;
         // printf("test:%s", line);
          if ((command = getcommand(line)) != NULL)

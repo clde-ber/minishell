@@ -72,6 +72,8 @@ int ft_ischarset(char *str, char c);
 size_t	len_wd(char const *str, char *charset);
 size_t	count_malloc(char const *s, char *str);
 void		*ft_free(char **res, int j);
+void    check_redir(char *command, char *output);
+void    redir_file(char *str, char *output);
 
 extern t_list *var_env;
 
