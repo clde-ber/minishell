@@ -30,8 +30,8 @@ void	ft_lstdelone(t_list *lst)
 {
 	if (lst)
 	{
-		lst->name = "\0";
-		lst->value = "\0";
+		lst->name = "";
+		lst->value = "";;
 	}
 }
 
@@ -101,7 +101,7 @@ void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *), char *str)
 	lst = lst->next;
 }
 
-t_list *set_env(char **env, char **tab)
+t_list *set_env(char **env, char **tab, t_list *var_env)
 {
     int i;
 	int j;
@@ -169,8 +169,6 @@ void print_env(char **tab, t_list *env)
 			str2 = ft_strjoin(env->name, "=");
 			str = ft_strjoin(str2, env->value);
 			printf("%s\n", str);
-			free(str);
-			free(str2);
 		}
 		env = env->next;
 	}

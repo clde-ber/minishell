@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-t_list *var_env = NULL;
-
 char *getcommand(char *str)
 {
     int i;
@@ -46,7 +44,7 @@ void    ft_pwd(char *str)
 // exemple: echo "pwd" > file pourrait trouver echo en premier.
 // need parsing plus precis en lettre par lettre
 
-void    dispatch(char *str, char **env)
+void    dispatch(char *str, char **env, t_list *var_env)
 {
     int i;
     char **res;
@@ -55,7 +53,7 @@ void    dispatch(char *str, char **env)
     res = ft_split(str, "\t\n\r\v\f ");
     while (res[i])
     {
-        printf("%d\n", i);
+        printf("i %d\n", i);
         printf("%s\n", res[i]);
         i++;
     }
@@ -63,14 +61,14 @@ void    dispatch(char *str, char **env)
         ft_pwd(str);
     else if (search_word(str, "echo") == 1)
         ft_echo(str);
-    else*/ if (ft_split(str, "\t\n\r\v\f ")[0][0] == '.' && ft_split(str, "\t\n\r\v\f ")[0][1] == '/')
+    else*/ if (res[0][0] == '.' && res[0][1] == '/')
         find_exe(0, str, env);
-    else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "export") == 0)
-        set_env(env, ft_split(str, "\t\n\r\v\f "));
-    else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "env") == 0)
+    else if (strcmp(res[0], "export") == 0)
+        var_env = set_env(env, res, var_env);
+    else if (ft_strcmp(res[0], "env") == 0)
         print_env(env, var_env);
-    else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "unset") == 0)
-        unset(var_env, ft_split(str, "\t\n\r\v\f "));
+    else if (ft_strcmp(res[0], "unset") == 0)
+        unset(var_env, res);
     else
         printf("nope");
 }
@@ -86,6 +84,8 @@ int main(int ac, char **av, char **env)
 
     end = 0;
     line = NULL;
+    res = 1;
+    t_list var_env;
     while (res && end == 0)
     {
         write(1, "***minishell*** > ", 18);
@@ -94,7 +94,7 @@ int main(int ac, char **av, char **env)
             end = 1;
         // printf("test:%s", line);
          if ((command = getcommand(line)) != NULL)
-            dispatch(command, env);
+            dispatch(command, env, &var_env);
 //        end = 1;
     }
     free(line);

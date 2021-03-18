@@ -38,7 +38,7 @@ char	*join_a_free(char *s1, char *s2);
 char	*ft_strjoin(char *s1, char *s2);
 int				get_next_line(int fd, char **line);
 size_t	ft_strlen(char *str);
-void    dispatch(char *str, char **env);
+void    dispatch(char *str, char **env, t_list *var_env);
 void    ft_pwd(char *str);
 char *getcommand(char *str);
 void    ft_echo(char *str);
@@ -52,7 +52,7 @@ int	ft_strcmp(const char *s1, const char *s2);
 char			**ft_split(char const *s, char *str);
 void print_env(char **tab, t_list *env);
 t_list	*unset(t_list *env, char **tab);
-t_list *set_env(char **env, char **tab);
+t_list *set_env(char **env, char **tab, t_list *var_env);
 void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *), char *str);
 t_list ft_record(void *lst, void *str);
 void	ft_lstadd_front(t_list **alst, t_list *new);
@@ -74,7 +74,5 @@ size_t	count_malloc(char const *s, char *str);
 void		*ft_free(char **res, int j);
 void    check_redir(char *command, char *output);
 void    redir_file(char *str, char *output);
-
-extern t_list *var_env;
 
 #endif
