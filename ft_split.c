@@ -91,8 +91,12 @@ size_t	len_wd(char const *str, char *charset)
 			if (str[i - 1] != '\\' && str[i] == '\"')
 				boolean = 1;
         }
-		if (((i && str[i - 1] != '\\') || !i) && ft_ischarset(charset, str[i]))
+		if (((i && str[i - 1] != '\\') || !i) && ft_ischarset(charset, str[i]) && i < ft_strlen(str))
+		{
+			while (str[i] && i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]))
+				i++;
 			boolean = 1;
+		}
 		i++;
 	}
 	return (i);
@@ -111,6 +115,7 @@ size_t	count_malloc(char const *s, char *str)
 	{
 		i += len_wd(&s[i], str);
 		count++;
+
 	}
 	printf("%d\n", count);
 	return (count);
