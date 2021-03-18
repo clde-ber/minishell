@@ -64,7 +64,7 @@ void    dispatch(char *str, char **env)
     else if (search_word(str, "echo") == 1)
         ft_echo(str);
     else*/ if (ft_split(str, "\t\n\r\v\f ")[0][0] == '.' && ft_split(str, "\t\n\r\v\f ")[0][1] == '/')
-        find_exe(0, str);
+        find_exe(0, str, env);
     else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "export") == 0)
         set_env(env, ft_split(str, "\t\n\r\v\f "));
     else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "env") == 0)

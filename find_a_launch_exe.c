@@ -45,7 +45,7 @@ char *get_path(char *path, char c)
     return (NULL);
 }
 
-int launch_exe(char *exe, char *path)
+int launch_exe(char *exe, char *path, char **env)
 {
     pid_t pid;
     int ret;
@@ -55,7 +55,7 @@ int launch_exe(char *exe, char *path)
     ret = 0;
     errno = 0;
     status = 0;
-    char* argv[] = { ft_strjoin(path, exe), "/bin/sh", "-c", NULL };
+    char* argv[] = { ft_strjoin(path, exe), env, NULL };
     char* envp[] = { ft_strjoin("HOME=", "."), ft_strjoin("PATH=", path), NULL };
     if ((pid = fork()) == 0)
     {
@@ -77,7 +77,7 @@ int launch_exe(char *exe, char *path)
 // waitpid attd que le programme se termine 
 }
 
-int find_exe(int index, char *path)
+int find_exe(int index, char *path, char **env)
 {
     DIR *dir;
     int i;
@@ -99,7 +99,7 @@ int find_exe(int index, char *path)
     {
         if (ft_strcmp(s_dir->d_name, str) == 0)
         {
-            launch_exe(s_dir->d_name, path);
+            launch_exe(s_dir->d_name, path, env);
             closedir(dir);
             return (0);
         }
@@ -107,6 +107,6 @@ int find_exe(int index, char *path)
     if (errno)
         printf("%s\n", strerror(errno));
     else
-        launch_exe(str, path);
+        launch_exe(str, path, env);
 	return (0);
 }

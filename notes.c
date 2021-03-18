@@ -1,4 +1,5 @@
-// compil : gcc -fsanitize=address find_a_launch_exe.c start_a_parse_bulle.c echo.c env.c gnl.c gnl_utils.c ft_split.c libft_utils.c minishell_utils.c redir.c && ./a.out
+// compil : gcc find_a_launch_exe.c start_a_parse_bulle.c echo.c env.c gnl.c gnl_utils.c ft_split.c libft_utils.c minishell_utils.c redir.c && ./a.out
+// -fsanitize=address
 
 // ---
 
