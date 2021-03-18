@@ -81,7 +81,11 @@ size_t	len_wd(char const *str, char *charset)
             while (!(str[i - 1] != '\\' && str[i] == '\''))
 				i++;
 			if (str[i - 1] != '\\' && str[i] == '\'')
+			{
+				if (i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]))
+					i++;
 				boolean = 1;
+			}
         }
         if (((i && str[i - 1] != '\\') || !i) && str[i] == '\"' && i + 1 < ft_strlen(str))
         {
@@ -89,7 +93,11 @@ size_t	len_wd(char const *str, char *charset)
             while (!(str[i - 1] != '\\' && str[i] == '\"'))
                 i++;
 			if (str[i - 1] != '\\' && str[i] == '\"')
+			{
+				if (i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]))
+					i++;
 				boolean = 1;
+			}
         }
 		if (((i && str[i - 1] != '\\') || !i) && ft_ischarset(charset, str[i]) && i < ft_strlen(str))
 		{
